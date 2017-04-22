@@ -8,6 +8,7 @@ export function fetchDataFromAPI() {
     .then(json => {
       console.log('columns:', json.meta.view.columns)
       console.log('meta:', json.meta.view)
+      console.log('json.data.slice(0, 400):', json.data.slice(0, 400))
       const sample = json.data.slice(0, 400)
       dispatch(getDataSuccess(sample))
     })

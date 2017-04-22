@@ -4,6 +4,15 @@ import { FlatList, TouchableHighlight, View, Text, StyleSheet, ScrollView } from
 import { connect } from 'react-redux'
 import { fetchDataFromAPI } from './actions'
 
+import {
+  appDataSelector,
+  dataSelector,
+  facebookSelector,
+  facebookDHSSelector,
+  greaterThan1kSelector,
+  twitterDHSElector
+}  from './selectors'
+
 let styles
 
 class App extends React.Component {
@@ -11,7 +20,7 @@ class App extends React.Component {
     this.props.getData()
   }
   renderItem = ({ item, index }) => {
-    return <View>
+    return <View style={{ paddingBottom: 20, paddingTop: 20, borderBottomWidth: 1, borderBottomColor: '#ededed' }}>
       <Text>Agency: {item[8]}</Text>
       <Text>Platform: {item[9]}</Text>
       <Text>Url: {item[10]}</Text>
@@ -26,7 +35,7 @@ class App extends React.Component {
       buttonText
     } = styles
     const { data, isFetching } = this.props.data;
-    console.log('data:', data);
+    const { results } = this.props
     return (
       <ScrollView style={container}>
         <Text style={text}>Twitter and Facebook statistics from various NYC agencies and organization</Text>
@@ -34,9 +43,9 @@ class App extends React.Component {
           isFetching && <Text>Loading</Text>
         }
         {
-          data.length ? (
+          results.length ? (
             <FlatList
-              data={data}
+              data={results}
               renderItem={this.renderItem}
               keyExtractor={(item) => item[0]}
             />
@@ -69,7 +78,8 @@ styles = StyleSheet.create({
 
 function mapStateToProps (state) {
   return {
-    data: state.data
+    data: appDataSelector(state),
+    results: twitterDHSElector(state)
   }
 }
 
