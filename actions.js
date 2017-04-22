@@ -1,33 +1,35 @@
-import { FETCHING_PEOPLE, FETCHING_PEOPLE_SUCCESS, FETCHING_PEOPLE_FAILURE } from './constants'
+import { FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from './constants'
 
-export function fetchPeopleFromAPI() {
+export function fetchDataFromAPI() {
   return (dispatch) => {
-    dispatch(getPeople())
-    fetch('https://swapi.co/api/people/')
+    dispatch(getData())
+    fetch('https://data.cityofnewyork.us/api/views/5b3a-rs48/rows.json')
     .then(data => data.json())
     .then(json => {
-      console.log('json:', json)
-      dispatch(getPeopleSuccess(json.results))
+      console.log('columns:', json.meta.view.columns)
+      console.log('meta:', json.meta.view)
+      const sample = json.data.slice(0, 400)
+      dispatch(getDataSuccess(sample))
     })
-    .catch(err => dispatch(getPeopleFailure(err)))
+    .catch(err => dispatch(getDataFailure(err)))
   }
 }
 
-export function getPeople() {
+export function getData() {
   return {
-    type: FETCHING_PEOPLE
+    type: FETCHING_DATA
   }
 }
 
-export function getPeopleSuccess(data) {
+export function getDataSuccess(data) {
   return {
-    type: FETCHING_PEOPLE_SUCCESS,
+    type: FETCHING_DATA_SUCCESS,
     data,
   }
 }
 
-export function getPeopleFailure() {
+export function getDataFailure() {
   return {
-    type: FETCHING_PEOPLE_FAILURE
+    type: FETCHING_DATA_FAILURE
   }
 }

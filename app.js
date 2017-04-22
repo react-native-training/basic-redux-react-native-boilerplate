@@ -1,40 +1,50 @@
 import React from 'react'
-import { TouchableHighlight, View, Text, StyleSheet } from 'react-native'
+import { FlatList, TouchableHighlight, View, Text, StyleSheet, ScrollView } from 'react-native'
 
 import { connect } from 'react-redux'
-import { fetchPeopleFromAPI } from './actions'
+import { fetchDataFromAPI } from './actions'
 
 let styles
 
-const App = (props) => {
-  const {
-    container,
-    text,
-    button,
-    buttonText
-  } = styles
-  const { people, isFetching } = props.people;
-  return (
-    <View style={container}>
-      <Text style={text}>Redux Example</Text>
-      <TouchableHighlight style={button} onPress={() => props.getPeople()}>
-        <Text style={buttonText}>Load People</Text>
-      </TouchableHighlight>
-      {
-        isFetching && <Text>Loading</Text>
-      }
-      {
-        people.length ? (
-          people.map((person, i) => {
-            return <View key={i} >
-              <Text>Name: {person.name}</Text>
-              <Text>Birth Year: {person.birth_year}</Text>
-            </View>
-          })
-        ) : null
-      }
+class App extends React.Component {
+  componentDidMount() {
+    this.props.getData()
+  }
+  renderItem = ({ item, index }) => {
+    return <View>
+      <Text>Agency: {item[8]}</Text>
+      <Text>Platform: {item[9]}</Text>
+      <Text>Url: {item[10]}</Text>
+      <Text>Interactions (Likes/Followers/Visits/Downloads): {item[12]}</Text>
     </View>
-  )
+  }
+  render() {
+    const {
+      container,
+      text,
+      button,
+      buttonText
+    } = styles
+    const { data, isFetching } = this.props.data;
+    console.log('data:', data);
+    return (
+      <ScrollView style={container}>
+        <Text style={text}>Twitter and Facebook statistics from various NYC agencies and organization</Text>
+        {
+          isFetching && <Text>Loading</Text>
+        }
+        {
+          data.length ? (
+            <FlatList
+              data={data}
+              renderItem={this.renderItem}
+              keyExtractor={(item) => item[0]}
+            />
+          ) : null
+        }
+      </ScrollView>
+    )
+  }
 }
 
 styles = StyleSheet.create({
@@ -59,13 +69,13 @@ styles = StyleSheet.create({
 
 function mapStateToProps (state) {
   return {
-    people: state.people
+    data: state.data
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    getPeople: () => dispatch(fetchPeopleFromAPI())
+    getData: () => dispatch(fetchDataFromAPI())
   }
 }
 

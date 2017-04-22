@@ -1,25 +1,25 @@
-import { FETCHING_PEOPLE, FETCHING_PEOPLE_SUCCESS, FETCHING_PEOPLE_FAILURE } from '../constants'
+import { FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
 const initialState = {
-  people: [],
+  data: [],
   isFetching: false,
   error: false
 }
 
-export default function peopleReducer (state = initialState, action) {
+export default function dataReducer (state = initialState, action) {
   switch (action.type) {
-    case FETCHING_PEOPLE:
+    case FETCHING_DATA:
       return {
         ...state,
-        people: [],
+        data: [],
         isFetching: true
       }
-    case FETCHING_PEOPLE_SUCCESS:
+    case FETCHING_DATA_SUCCESS:
       return {
         ...state,
         isFetching: false,
-        people: action.data
+        data: action.data
       }
-    case FETCHING_PEOPLE_FAILURE:
+    case FETCHING_DATA_FAILURE:
       return {
         ...state,
         isFetching: false,
